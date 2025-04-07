@@ -13,7 +13,12 @@ if (!DATABASE_URL) throw new Error('DATABASE_URL is not set');
 const client = createClient({
 	url: DATABASE_URL.startsWith('file:') 
 		? `file:${join(process.cwd(), DATABASE_URL.slice(5))}` 
-		: DATABASE_URL
+		: DATABASE_URL,
+  authToken: process.env.DATABASE_AUTH_TOKEN
 });
 
-export const db = drizzle(client, { schema });
+// Configure drizzle with the schema and prepare statements for more efficient queries
+export const db = drizzle(client, { 
+  schema,
+  logger: process.env.NODE_ENV === 'development' ? true : false
+});

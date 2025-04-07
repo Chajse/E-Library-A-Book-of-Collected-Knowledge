@@ -1,38 +1,108 @@
-# sv
+# E-Library: A Book of Collected Knowledge
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A digital library management system built with SvelteKit, Drizzle ORM, and SQLite.
 
-## Creating a project
+## Setup Instructions
 
-If you're seeing this, you've probably already done this step. Congrats!
+Follow these steps to set up the E-Library project after cloning it from GitHub.
+
+### 1. Install Dependencies
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+# Install all required dependencies
+npm install
 ```
 
-## Developing
+### 2. Environment Configuration
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Create a `.env` file in the root directory with the following content:
+
+```
+DATABASE_URL="file:./local.db"
+AUTH_SECRET="your-auth-secret-key"
+```
+
+Replace `your-auth-secret-key` with a secure random string.
+
+### 3. Database Setup
+
+Run the following commands to set up and initialize the database:
 
 ```bash
+# Initialize the database structure
+npm run db:init
+
+# Run database migrations
+npm run migrate
+
+# Push schema changes to the database
+npm run db:push
+
+# Seed the database with an admin user
+npm run seed
+
+# Add test users (optional)
+npm run seed:test
+```
+
+After running the seed commands, you'll have access to these accounts:
+
+- Admin login:
+  - Email: `admin@example.com`
+  - Password: `admin123`
+
+- Test user (if you ran seed:test):
+  - Email: `user@example.com`
+  - Password: `password123`
+
+### 4. Running the Application
+
+```bash
+# Start the development server
 npm run dev
 
-# or start the server and open the app in a new browser tab
+# Or to open it in a new browser tab automatically
 npm run dev -- --open
 ```
 
-## Building
+### 5. Database Management
 
-To create a production version of your app:
+The project includes several utility scripts for database management:
 
 ```bash
-npm run build
+# Check database content
+npm run db:check
+
+# Fix user data if needed
+npm run db:fix
+
+# Open the database studio for visual management
+npm run db:studio
 ```
 
-You can preview the production build with `npm run preview`.
+### 6. Building for Production
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+# Create a production build
+npm run build
+
+# Preview the production build
+npm run preview
+```
+
+## Project Structure
+
+- `/src/routes` - Contains all routes and page components
+- `/src/lib` - Shared libraries and components
+  - `/components` - Reusable UI components
+  - `/server` - Server-side code
+    - `/db` - Database configuration and schema
+    - `/auth` - Authentication utilities
+
+## Technologies Used
+
+- SvelteKit - Frontend framework
+- Drizzle ORM - Database ORM
+- SQLite (via LibSQL) - Database
+- TailwindCSS - Styling
+- bcryptjs - Password hashing

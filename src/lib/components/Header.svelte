@@ -8,6 +8,8 @@
     role: 'user' | 'admin';
   } | null = null;
 
+  $: isAdminPage = $page.url.pathname.startsWith('/admin');
+
   async function handleLogout() {
     try {
       const response = await fetch('/api/auth/logout', { 
@@ -27,33 +29,23 @@
   }
 </script>
 
-<header class="bg-gray-800 text-white p-4">
-  <nav class="container mx-auto flex justify-between items-center">
-    <div class="flex items-center space-x-4">
-      <a href="/" class="text-xl font-bold">E-Library</a>
-      {#if user}
-        {#if user.role === 'admin'}
-          <a
-            href="/admin"
-            class="hover:text-gray-300 {$page.url.pathname.startsWith('/admin') ? 'text-[#B5BD36]' : ''}"
-          >
-            Admin Dashboard
-          </a>
-        {:else}
-          <a
-            href="/dashboard"
-            class="hover:text-gray-300 {$page.url.pathname.startsWith('/dashboard') ? 'text-[#B5BD36]' : ''}"
-          >
-            Dashboard
-          </a>
-        {/if}
-        <a
-          href="/books"
-          class="hover:text-gray-300 {$page.url.pathname.startsWith('/books') ? 'text-[#B5BD36]' : ''}"
-        >
-          Books
-        </a>
-      {/if}
+<!-- <header class="bg-gray-800 text-white py-2 px-4">
+  <div class="flex justify-between items-center">
+    <div class="flex items-center gap-4">
+      <img src="/logo.jpg" alt="E-Library Logo" class="h-10 w-auto" />
+      <h1 class="text-xl font-bold">E-Library</h1>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-yellow-400">Admin</span>
+      <div class="w-8 h-8 bg-white rounded-full"></div>
+    </div>
+  </div>
+</header> -->
+<header class="bg-gray-800 text-white py-2 px-4">
+  <div class="flex justify-between items-center">
+    <div class="flex items-center gap-4">
+      <img src="/logo.jpg" alt="E-Library Logo" class="h-10 w-auto" />
+      <h1 class="text-xl font-bold">E-Library</h1>
     </div>
     
     <div class="flex items-center space-x-4">
@@ -82,11 +74,5 @@
         </a>
       {/if}
     </div>
-  </nav>
-</header>
 
-<style>
-  .active {
-    @apply ring-2 ring-white;
-  }
-</style> 
+</header> 
