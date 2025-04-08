@@ -29,18 +29,7 @@
   }
 </script>
 
-<!-- <header class="bg-gray-800 text-white py-2 px-4">
-  <div class="flex justify-between items-center">
-    <div class="flex items-center gap-4">
-      <img src="/logo.jpg" alt="E-Library Logo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold">E-Library</h1>
-    </div>
-    <div class="flex items-center gap-2">
-      <span class="text-yellow-400">Admin</span>
-      <div class="w-8 h-8 bg-white rounded-full"></div>
-    </div>
-  </div>
-</header> -->
+
 <header class="bg-gray-800 text-white py-2 px-4">
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-4">

@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
   }
 
   if (user.role !== 'admin') {
-    throw redirect(303, '/dashboard');
+    throw redirect(303, '/books');
   }
 
   const { id } = params;
@@ -62,7 +62,7 @@ export const actions: Actions = {
     }
 
     if (user.role !== 'admin') {
-      throw redirect(303, '/dashboard');
+      throw redirect(303, '/books');
     }
 
     const { id } = params;

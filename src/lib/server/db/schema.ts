@@ -30,3 +30,19 @@ export const categories = sqliteTable('categories', {
 	createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`),
 	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`)
 });
+
+export const favorites = sqliteTable('favorites', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	userId: integer('user_id').notNull(),
+	bookId: integer('book_id').notNull(),
+	createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`)
+});
+
+export const bookmarks = sqliteTable('bookmarks', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	userId: integer('user_id').notNull(),
+	bookId: integer('book_id').notNull(),
+	lastPage: integer('last_page').default(0),
+	createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`),
+	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`)
+});

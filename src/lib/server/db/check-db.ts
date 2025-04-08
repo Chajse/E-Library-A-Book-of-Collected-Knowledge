@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import { db } from '../db';
-import { users, books } from './schema';
+import { users, books, favorites, bookmarks } from './schema';
 import { sql } from 'drizzle-orm';
 
 dotenv.config();
@@ -61,6 +61,61 @@ async function checkDatabase() {
       console.log('The books table might not exist in the database.');
     }
     
+    // Check favorites table
+    console.log('\nChecking favorites table...');
+    try {
+      const allFavorites = await db.select().from(favorites);
+      console.log(`Found ${allFavorites.length} favorites:`);
+      
+      if (allFavorites.length > 0) {
+        allFavorites.forEach(favorite => {
+          // Format dates manually if they're invalid
+          const formattedFavorite = {
+            ...favorite,
+            createdAt: favorite.createdAt instanceof Date && !isNaN(favorite.createdAt.getTime()) 
+              ? favorite.createdAt.toISOString() 
+              : 'Unknown date'
+          };
+          
+          console.log(formattedFavorite);
+        });
+      } else {
+        console.log('No favorites found in the database.');
+      }
+    } catch (error) {
+      console.error('Error checking favorites table:', error);
+      console.log('The favorites table might not exist in the database.');
+    }
+    
+    // Check bookmarks table
+    console.log('\nChecking bookmarks table...');
+    try {
+      const allBookmarks = await db.select().from(bookmarks);
+      console.log(`Found ${allBookmarks.length} bookmarks:`);
+      
+      if (allBookmarks.length > 0) {
+        allBookmarks.forEach(bookmark => {
+          // Format dates manually if they're invalid
+          const formattedBookmark = {
+            ...bookmark,
+            createdAt: bookmark.createdAt instanceof Date && !isNaN(bookmark.createdAt.getTime()) 
+              ? bookmark.createdAt.toISOString() 
+              : 'Unknown date',
+            updatedAt: bookmark.updatedAt instanceof Date && !isNaN(bookmark.updatedAt.getTime()) 
+              ? bookmark.updatedAt.toISOString() 
+              : 'Unknown date'
+          };
+          
+          console.log(formattedBookmark);
+        });
+      } else {
+        console.log('No bookmarks found in the database.');
+      }
+    } catch (error) {
+      console.error('Error checking bookmarks table:', error);
+      console.log('The bookmarks table might not exist in the database.');
+    }
+    
     console.log('\nChecking database schema...');
     // Use a raw query to get table info
     try {
@@ -75,6 +130,24 @@ async function checkDatabase() {
         console.log(booksSchema.rows);
       } else {
         console.log('Books table schema not found.');
+      }
+      
+      // Check favorites table schema
+      const favoritesSchema = await db.run(sql`PRAGMA table_info(favorites);`);
+      console.log('\nFavorites table schema:');
+      if (favoritesSchema.rows.length > 0) {
+        console.log(favoritesSchema.rows);
+      } else {
+        console.log('Favorites table schema not found.');
+      }
+      
+      // Check bookmarks table schema
+      const bookmarksSchema = await db.run(sql`PRAGMA table_info(bookmarks);`);
+      console.log('\nBookmarks table schema:');
+      if (bookmarksSchema.rows.length > 0) {
+        console.log(bookmarksSchema.rows);
+      } else {
+        console.log('Bookmarks table schema not found.');
       }
     } catch (error) {
       console.error('Error checking database schema:', error);

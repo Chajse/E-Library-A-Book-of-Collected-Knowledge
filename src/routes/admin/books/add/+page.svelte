@@ -38,9 +38,7 @@
   <div class="flex">
     <!-- Sidebar -->
     <div class="w-48 bg-[#B5BD36] min-h-screen">
-      <button class="w-full px-4 py-2 text-white text-left hover:bg-[#a5ad26]">
-        <span class="material-icons">arrow_back</span>
-      </button>
+    
       <nav class="py-4">
         <a href="/admin" class="block w-full px-4 py-3 text-white hover:bg-[#a5ad26] flex items-center gap-2">
           <span class="material-icons">dashboard</span>

@@ -6,10 +6,10 @@
 
 	export let data: LayoutData;
 	
-	const hideHeaderPaths = ['/', '/login', '/register'];
-	const adminPaths = ['/admin', '/admin/users', '/admin/books', '/admin/books/add'];
-	$: showHeader = !hideHeaderPaths.includes($page.url.pathname);
+	const hideHeaderPaths = ['/', '/login', '/register', '/books', '/admin', '/admin/users', '/admin/books', '/admin/books/add'];
+	$: showHeader = !hideHeaderPaths.includes($page.url.pathname) && !$page.url.pathname.startsWith('/admin') && !$page.url.pathname.startsWith('/books');
 	$: isAdminPage = $page.url.pathname.startsWith('/admin');
+	$: isBooksPage = $page.url.pathname.startsWith('/books');
 </script>
 
 {#if showHeader}
@@ -18,6 +18,10 @@
 
 {#if isAdminPage}
 	<main class="min-h-screen">
+		<slot />
+	</main>
+{:else if isBooksPage}
+	<main class="min-h-screen bg-gray-50">
 		<slot />
 	</main>
 {:else}
