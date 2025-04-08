@@ -55,12 +55,12 @@ const protectRoutes: Handle = async ({ event, resolve }) => {
       throw redirect(303, '/login');
     }
     if (user.role !== 'admin') {
-      throw redirect(303, '/dashboard');
+      throw redirect(303, '/books');
     }
   }
 
   // Protect dashboard routes
-  if (pathname.startsWith('/dashboard')) {
+  if (pathname.startsWith('/books')) {
     if (!user) {
       throw redirect(303, '/login');
     }

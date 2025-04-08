@@ -6,16 +6,28 @@
 
 	export let data: LayoutData;
 	
-	const hideHeaderPaths = ['/', '/login', '/register'];
-	$: showHeader = !hideHeaderPaths.includes($page.url.pathname);
+	const hideHeaderPaths = ['/', '/login', '/register', '/books', '/admin', '/admin/users', '/admin/books', '/admin/books/add'];
+	$: showHeader = !hideHeaderPaths.includes($page.url.pathname) && !$page.url.pathname.startsWith('/admin') && !$page.url.pathname.startsWith('/books');
+	$: isAdminPage = $page.url.pathname.startsWith('/admin');
+	$: isBooksPage = $page.url.pathname.startsWith('/books');
 </script>
 
 {#if showHeader}
 	<Header user={data.session?.user} />
 {/if}
 
-<main class="min-h-screen bg-gray-50">
-	<div class="container mx-auto px-4 py-8">
+{#if isAdminPage}
+	<main class="min-h-screen">
 		<slot />
-	</div>
-</main>
+	</main>
+{:else if isBooksPage}
+	<main class="min-h-screen bg-gray-50">
+		<slot />
+	</main>
+{:else}
+	<main class="min-h-screen bg-gray-50">
+		<div class="container mx-auto px-4 py-8">
+			<slot />
+		</div>
+	</main>
+{/if}

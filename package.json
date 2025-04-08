@@ -7,17 +7,21 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
+		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint .",
+		"format": "prettier --plugin prettier-plugin-svelte --write .",
+		"lint": "prettier --plugin prettier-plugin-svelte --check . && eslint .",
+		"test:integration": "playwright test",
+		"test:unit": "vitest",
+		"migrate": "drizzle-kit generate",
 		"db:push": "drizzle-kit push",
-		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
-		"migrate": "tsx src/lib/server/db/migrate.ts",
-		"seed": "tsx src/lib/server/db/seed.ts",
-		"db:init": "tsx src/lib/server/db/init.ts"
+		"db:check": "tsx src/lib/server/db/check-db.ts",
+		"db:init": "tsx src/lib/server/db/init.ts",
+		"db:init-tables": "tsx src/lib/server/db/init-tables.ts",
+		"seed": "tsx src/lib/server/db/seed-admin.ts",
+		"seed:test": "tsx src/lib/server/db/seed-test-user.ts"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
@@ -48,9 +52,11 @@
 		"@auth/sveltekit": "^1.8.0",
 		"@libsql/client": "^0.14.0",
 		"@types/bcryptjs": "^2.4.6",
+		"@types/uuid": "^10.0.0",
 		"bcryptjs": "^3.0.2",
 		"dotenv": "^16.4.7",
 		"drizzle-orm": "^0.40.0",
-		"e-library-a-book-of-collected-knowledge": "file:"
+		"e-library-a-book-of-collected-knowledge": "file:",
+		"uuid": "^11.1.0"
 	}
 }

@@ -32,7 +32,7 @@
             </a>
           {:else}
             <a
-              href={$page.data.session.user.role === 'admin' ? '/admin' : '/dashboard'}
+              href={$page.data.session.user.role === 'admin' ? '/admin' : '/books'}
               class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#B5BD36] hover:bg-[#9ca22f]"
             >
               Go to Dashboard
