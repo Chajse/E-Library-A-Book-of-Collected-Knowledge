@@ -1,6 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import type { PageData } from './$types';
+  import { invalidateAll } from '$app/navigation';
 
   export let data: PageData;
 
@@ -67,6 +68,24 @@
       }
     }
   }
+  
+  async function handleLogout() {
+    try {
+      const response = await fetch('/api/auth/logout', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        await invalidateAll();
+        window.location.href = '/login';
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  }
 </script>
 
 <svelte:window on:click={handleClickOutside} />
@@ -108,12 +127,32 @@
     </div>
   {/if}
 
-  <div class="flex">
+  <!-- Header -->
+  <header class="bg-gray-800 text-white py-2 px-4 sticky top-0 z-50 shadow-md">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <img src="/logo.jpg" alt="E-Library Logo" class="h-10 w-auto" />
+        <h1 class="text-xl font-bold">E-Library Admin</h1>
+      </div>
+      
+      <div class="flex items-center space-x-4">
+        {#if data.session?.user}
+          <span class="text-sm">{data.session.user.firstName} {data.session.user.lastName}</span>
+          <button
+            on:click={handleLogout}
+            class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md text-sm"
+          >
+            Logout
+          </button>
+        {/if}
+      </div>
+    </div>
+  </header>
+
+  <div class="flex h-full">
     <!-- Sidebar -->
-    <div class="w-48 bg-[#B5BD36] min-h-screen">
-      <button class="w-full px-4 py-2 text-white text-left hover:bg-[#a5ad26]">
-        <span class="material-icons">arrow_back</span>
-      </button>
+    <div class="w-48 bg-[#B5BD36] min-h-screen sticky top-0 left-0">
+      
       <nav class="py-4">
         <a href="/admin" class="block w-full px-4 py-3 text-white hover:bg-[#a5ad26] flex items-center gap-2">
           <span class="material-icons">dashboard</span>
@@ -135,7 +174,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 bg-[#FAF9E4] min-h-screen px-8 py-6">
+    <div class="flex-1 bg-[#FAF9E4] h-screen px-8 py-6 overflow-y-auto">
       <h1 class="text-2xl font-bold text-[#B5BD36] mb-6">List of Book</h1>
       
       <div class="flex justify-between items-center mb-6">
@@ -170,75 +209,87 @@
         </div>
       </div>
 
-      <div class="grid gap-6">
-        {#each filteredBooks as book}
-          <div class="bg-white shadow-md rounded-md overflow-hidden p-4">
-            <div class="flex">
-              <div class="w-32 h-40 bg-gray-200 mr-4 flex-shrink-0">
-                {#if book.coverImage}
-                  <img src={book.coverImage} alt={book.title} class="w-full h-full object-cover" />
-                {:else}
-                  <div class="w-full h-full flex items-center justify-center bg-gray-300 text-gray-500">
-                    No Cover
-                  </div>
-                {/if}
-              </div>
-              
-              <div class="flex-1">
-                <div class="text-xs text-gray-500 uppercase mb-1">{book.category}</div>
-                <h3 class="text-lg font-bold text-gray-800 mb-1">{book.title}</h3>
-                <div class="text-sm text-gray-600 mb-2">{book.author}</div>
-                <p class="text-sm text-gray-700 mb-4 line-clamp-3">{book.description}</p>
-              </div>
-              
-              <div class="flex-shrink-0 relative">
-                <button 
-                  class="text-gray-400 dropdown-toggle"
-                  on:click={() => toggleDropdown(book.id)}
-                  aria-label="Options menu"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                  </svg>
-                </button>
-                
-                {#if activeDropdown === book.id}
-                  <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 dropdown-menu">
-                    <div class="py-1">
-                      <a 
-                        href="/admin/books/{book.id}/edit" 
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        Edit Details
-                      </a>
-                      <button 
-                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        Archive Book
-                      </button>
-                      <button 
-                        on:click={() => confirmDelete(book)}
-                        class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                      >
-                        Delete Book
-                      </button>
+      <div class="max-h-[calc(100vh-250px)] overflow-y-auto scrollbar-hide pr-2">
+        <div class="grid gap-6">
+          {#each filteredBooks as book}
+            <div class="bg-white shadow-md rounded-md overflow-hidden p-4">
+              <div class="flex">
+                <div class="w-32 h-40 bg-gray-200 mr-4 flex-shrink-0">
+                  {#if book.coverImage}
+                    <img src={book.coverImage} alt={book.title} class="w-full h-full object-cover" />
+                  {:else}
+                    <div class="w-full h-full flex items-center justify-center bg-gray-300 text-gray-500">
+                      No Cover
                     </div>
-                  </div>
-                {/if}
+                  {/if}
+                </div>
+                
+                <div class="flex-1">
+                  <div class="text-xs text-gray-500 uppercase mb-1">{book.category}</div>
+                  <h3 class="text-lg font-bold text-gray-800 mb-1">{book.title}</h3>
+                  <div class="text-sm text-gray-600 mb-2">{book.author}</div>
+                  <p class="text-sm text-gray-700 mb-4 line-clamp-3">{book.description}</p>
+                </div>
+                
+                <div class="flex-shrink-0 relative">
+                  <button 
+                    class="text-gray-400 dropdown-toggle"
+                    on:click={() => toggleDropdown(book.id)}
+                    aria-label="Options menu"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </button>
+                  
+                  {#if activeDropdown === book.id}
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 dropdown-menu">
+                      <div class="py-1">
+                        <a 
+                          href="/admin/books/{book.id}/edit" 
+                          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Edit Details
+                        </a>
+                        <button 
+                          class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Archive Book
+                        </button>
+                        <button 
+                          on:click={() => confirmDelete(book)}
+                          class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                        >
+                          Delete Book
+                        </button>
+                      </div>
+                    </div>
+                  {/if}
+                </div>
               </div>
             </div>
-          </div>
-        {/each}
-        
-        {#if filteredBooks.length === 0}
-          <div class="bg-white shadow-md rounded-md p-8 text-center">
-            <p class="text-gray-500">No books found. Try a different search term or add a new book.</p>
-            <a href="/admin/books/add" class="mt-4 inline-block px-4 py-2 bg-[#B5BD36] text-white rounded-md">
-              Add New Book
-            </a>
-          </div>
-        {/if}
+          {/each}
+          
+          {#if filteredBooks.length === 0}
+            <div class="bg-white shadow-md rounded-md p-8 text-center">
+              <p class="text-gray-500">No books found. Try a different search term or add a new book.</p>
+              <a href="/admin/books/add" class="mt-4 inline-block px-4 py-2 bg-[#B5BD36] text-white rounded-md">
+                Add New Book
+              </a>
+            </div>
+          {/if}
+        </div>
       </div>
     </div>
   </div>
-</div> 
+</div>
+
+<style>
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+</style> 

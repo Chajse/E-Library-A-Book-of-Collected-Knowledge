@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     if (locals.user.role === 'admin') {
       throw redirect(303, '/admin');
     } else {
-      throw redirect(303, '/dashboard');
+      throw redirect(303, '/books');
     }
   }
   

@@ -30,15 +30,53 @@
     showDeleteConfirm = false;
     userToDelete = null;
   }
+
+  async function handleLogout() {
+    try {
+      const response = await fetch('/api/auth/logout', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        await invalidateAll();
+        window.location.href = '/login';
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  }
 </script>
 
 <div class="min-h-screen bg-cream-50">
-  <div class="flex">
+  <!-- Header -->
+  <header class="bg-gray-800 text-white py-2 px-4 sticky top-0 z-50 shadow-md">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <img src="/logo.jpg" alt="E-Library Logo" class="h-10 w-auto" />
+        <h1 class="text-xl font-bold">E-Library Admin</h1>
+      </div>
+      
+      <div class="flex items-center space-x-4">
+        {#if data.session?.user}
+          <span class="text-sm">{data.session.user.firstName} {data.session.user.lastName}</span>
+          <button
+            on:click={handleLogout}
+            class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md text-sm"
+          >
+            Logout
+          </button>
+        {/if}
+      </div>
+    </div>
+  </header>
+
+  <div class="flex h-full">
     <!-- Sidebar -->
-    <div class="w-48 bg-[#B5BD36] min-h-screen">
-      <button class="w-full px-4 py-2 text-white text-left hover:bg-[#a5ad26]">
-        <span class="material-icons">arrow_back</span>
-      </button>
+    <div class="w-48 bg-[#B5BD36] min-h-screen sticky top-0 left-0">
+     
       <nav class="py-4">
         <a href="/admin" class="block w-full px-4 py-3 text-white hover:bg-[#a5ad26] flex items-center gap-2">
           <span class="material-icons">dashboard</span>
@@ -60,7 +98,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 bg-[#FAF9E4] min-h-screen px-8">
+    <div class="flex-1 bg-[#FAF9E4] h-screen px-8 overflow-y-auto">
       <h1 class="text-2xl font-bold text-[#B5BD36] mt-6 mb-6">All Users</h1>
       
       {#if form?.message}
@@ -97,72 +135,74 @@
       </div>
 
       <div class="bg-white shadow-md rounded-md overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Username
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Email Address
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            {#each filteredUsers as user}
+        <div class="max-h-[calc(100vh-250px)] overflow-y-auto scrollbar-hide">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50 sticky top-0 z-10">
               <tr>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{user.username}</div>
-                  <div class="text-xs text-gray-500">{user.role}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{user.email}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <form method="POST" action="?/toggleStatus" use:enhance>
-                    <input type="hidden" name="id" value={user.id} />
-                    <input type="hidden" name="currentStatus" value={user.active} />
-                    <button type="submit" class="focus:outline-none">
-                      {#if user.active}
-                        <span class="px-4 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Activate
-                        </span>
-                      {:else}
-                        <span class="px-4 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                          Inactivate
-                        </span>
-                      {/if}
-                    </button>
-                  </form>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                  <div class="flex space-x-2">
-                    <a href="/admin/users/{user.id}/edit" class="text-gray-500 hover:text-gray-700" aria-label="Edit user">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                      </svg>
-                    </a>
-                    <button 
-                      on:click={() => confirmDelete(user.id)} 
-                      class="text-red-500 hover:text-red-700" 
-                      aria-label="Delete user"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </div>
-                </td>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Username
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Email Address
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Action
+                </th>
               </tr>
-            {/each}
-          </tbody>
-        </table>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              {#each filteredUsers as user}
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">{user.username}</div>
+                    <div class="text-xs text-gray-500">{user.role}</div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">{user.email}</div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <form method="POST" action="?/toggleStatus" use:enhance>
+                      <input type="hidden" name="id" value={user.id} />
+                      <input type="hidden" name="currentStatus" value={user.active} />
+                      <button type="submit" class="focus:outline-none">
+                        {#if user.active}
+                          <span class="px-4 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Activate
+                          </span>
+                        {:else}
+                          <span class="px-4 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                            Inactivate
+                          </span>
+                        {/if}
+                      </button>
+                    </form>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <div class="flex space-x-2">
+                      <a href="/admin/users/{user.id}/edit" class="text-gray-500 hover:text-gray-700" aria-label="Edit user">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                      </a>
+                      <button 
+                        on:click={() => confirmDelete(user.id)} 
+                        class="text-red-500 hover:text-red-700" 
+                        aria-label="Delete user"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -207,4 +247,14 @@
       </div>
     </div>
   </div>
-{/if} 
+{/if}
+
+<style>
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+</style> 

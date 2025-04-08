@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ locals }) => {
   }
 
   if (user.role !== 'admin') {
-    throw redirect(303, '/dashboard');
+    throw redirect(303, '/books');
   }
 
   try {
@@ -50,7 +50,7 @@ export const actions: Actions = {
     }
 
     if (user.role !== 'admin') {
-      throw redirect(303, '/dashboard');
+      throw redirect(303, '/books');
     }
 
     const formData = await request.formData();
@@ -98,7 +98,7 @@ export const actions: Actions = {
     }
 
     if (user.role !== 'admin') {
-      throw redirect(303, '/dashboard');
+      throw redirect(303, '/books');
     }
 
     const formData = await request.formData();
