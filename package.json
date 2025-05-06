@@ -20,7 +20,7 @@
 		"db:check": "tsx src/lib/server/db/check-db.ts",
 		"db:init": "tsx src/lib/server/db/init.ts",
 		"db:init-tables": "tsx src/lib/server/db/init-tables.ts",
-		"seed": "tsx src/lib/server/db/seed.ts",
+		"seed": "tsx src/lib/server/db/seed-admin.ts",
 		"seed:test": "tsx src/lib/server/db/seed-test-user.ts"
 	},
 	"devDependencies": {

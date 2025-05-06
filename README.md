@@ -18,8 +18,18 @@ npm install
 Create a `.env` file in the root directory with the following content:
 
 ```
-DATABASE_URL="file:./local.db"
-AUTH_SECRET="your-auth-secret-key"
+DATABASE_URL="file:E-lib.db"
+AUTH_SECRET="QWERTYUIOPASDFGHJKLZXCVBNMQWERTY"
+
+```
+
+Create a `.env.example` the root directory with the following content:
+
+```
+DATABASE_URL="libsql://db-name-user.turso.io"
+DATABASE_AUTH_TOKEN=""
+AUTH_SECRET="QWERTYUIOPASDFGHJKLZXCVBNMQWERTY"
+
 ```
 
 Replace `your-auth-secret-key` with a secure random string.
