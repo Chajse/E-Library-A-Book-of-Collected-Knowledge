@@ -11,10 +11,10 @@ async function seed() {
   try {
     // Create admin user
     await createUser({
-      email: 'admin1@example.com',
+      email: 'admin2@example.com',
       password: 'admin123',
-      firstName: 'Admin1',
-      lastName: 'User1',
+      firstName: 'Admin2',
+      lastName: 'User2',
       role: 'admin'
     });
 

@@ -21,7 +21,9 @@
 		"db:init": "tsx src/lib/server/db/init.ts",
 		"db:init-tables": "tsx src/lib/server/db/init-tables.ts",
 		"seed": "tsx src/lib/server/db/seed.ts",
-		"seed:test": "tsx src/lib/server/db/seed-test-user.ts"
+		"seed:test": "tsx src/lib/server/db/seed-test-user.ts",
+		"cypress:open": "cypress open",
+		"cypress:run": "cypress run"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
@@ -30,6 +32,7 @@
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/vite": "^4.0.0",
+		"cypress": "^13.17.0",
 		"drizzle-kit": "^0.30.2",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
