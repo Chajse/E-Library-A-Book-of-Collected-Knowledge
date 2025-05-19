@@ -33,8 +33,8 @@
 <header class="bg-gray-800 text-white py-2 px-4">
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-4">
-      <img src="/logo.jpg" alt="E-Library Logo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold">E-Library</h1>
+      <img src="/Logo.png" alt="E-Library Logo" class="h-10 w-auto" />
+      
     </div>
     
     <div class="flex items-center space-x-4">

@@ -55,8 +55,8 @@
   <header class="bg-gray-800 text-white py-2 px-4 sticky top-0 z-50 shadow-md">
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-4">
-        <img src="/logo.jpg" alt="E-Library Logo" class="h-10 w-auto" />
-        <h1 class="text-xl font-bold">E-Library Admin</h1>
+        <img src="/Logo.png" alt="E-Library Logo" class="h-10 w-auto" />
+        
       </div>
       
       <div class="flex items-center space-x-4">

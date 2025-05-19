@@ -66,9 +66,8 @@
   <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
     <div class="text-center">
       <div class="flex justify-center mb-4">
-        <img src="/logo.jpg" alt="E-Library Logo" class="h-20 w-auto" />
+        <img src="/Logo.png" alt="E-Library Logo" class="h-20 w-auto" />
       </div>
-      <h2 class="text-3xl font-bold text-gray-900 mb-2">E-Library</h2>
     </div>
 
     <div class="relative">

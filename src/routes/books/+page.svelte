@@ -241,8 +241,8 @@
     <!-- Header -->
     <header class="bg-[#E8E4C9] py-4 px-6 flex justify-between items-center mb-8 w-full sticky top-0 z-50 shadow-md">
       <div class="flex items-center gap-4">
-        <img src="/logo.jpg" alt="E-Library Logo" class="h-10 w-auto" />
-        <h1 class="text-xl font-semibold">E-Library</h1>
+        <img src="/Logo.png" alt="E-Library Logo" class="h-10 w-auto" />
+        
       </div>
       <div class="flex items-center gap-6">
         <div class="relative">
@@ -628,8 +628,8 @@
     <!-- Header -->
     <header class="bg-[#E8E4C9] py-4 px-6 flex justify-between items-center mb-8 w-full sticky top-0 z-50 shadow-md">
       <div class="flex items-center gap-4">
-        <img src="/logo.jpg" alt="E-Library Logo" class="h-10 w-auto" />
-        <h1 class="text-xl font-semibold">E-Library</h1>
+        <img src="/Logo.png" alt="E-Library Logo" class="h-10 w-auto" />
+        
       </div>
       <div class="flex items-center gap-6">
         <div class="relative">

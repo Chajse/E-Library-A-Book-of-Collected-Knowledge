@@ -8,7 +8,7 @@
     <div class="container mx-auto px-4 py-16 sm:py-24">
       <div class="text-center">
         <div class="flex justify-center mb-8">
-          <img src="/logo.jpg" alt="E-Library Logo" class="h-32 w-auto" />
+          <img src="/imgbook.png" alt="E-Library Logo" class="h-32 w-auto" />
         </div>
         <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl md:text-6xl">
           Welcome to E-Library
