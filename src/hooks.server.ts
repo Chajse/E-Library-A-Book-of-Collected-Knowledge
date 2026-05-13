@@ -1,7 +1,7 @@
 import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import type { Session } from '@auth/core/types';
-
+//TEST
 // Handle session management
 const handleSession: Handle = async ({ event, resolve }) => {
   const sessionCookie = event.cookies.get('session');
